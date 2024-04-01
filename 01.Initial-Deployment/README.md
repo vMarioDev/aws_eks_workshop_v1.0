@@ -5,7 +5,7 @@
 ```bash
 # Fire the Cloud9 IDE creation cloudformation
 wget -q https://raw.githubusercontent.com/aws-samples/eks-workshop-v2/stable/lab/cfn/eks-workshop-ide-cfn.yaml -O eks-workshop-ide-cfn.yaml
-aws cloudformation deploy --stack-name eks-workshop-v1 \
+aws cloudformation deploy --stack-name eks-workshop \
     --template-file ./eks-workshop-ide-cfn.yaml \
     --parameter-overrides RepositoryRef=stable \
     --capabilities CAPABILITY_NAMED_IAM
@@ -14,7 +14,7 @@ aws cloudformation deploy --stack-name eks-workshop-v1 \
 - Open the Cloud9 IDE, from console or with URL below
 
 ```bash
-aws cloudformation describe-stacks --stack-name eks-workshop-v1 \
+aws cloudformation describe-stacks --stack-name eks-workshop \
     --query 'Stacks[0].Outputs[?OutputKey==`Cloud9Url`].OutputValue' \
     --output text
 ```

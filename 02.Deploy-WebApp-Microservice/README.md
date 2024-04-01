@@ -10,6 +10,7 @@ retail_store_architecture.png
 - Prepare the Cloud9 environment and EKS cluster for this module
 
 ```bash
+use-cluster $EKS_CLUSTER_NAME
 prepare-environment introduction/getting-started
 ```
 
@@ -25,7 +26,7 @@ kubectl get namespace
 kubectl get namespaces -l app.kubernetes.io/created-by=eks-workshop
 ```
 
-- This application uses Kustomize to manage Kubernetes deployments
+- This application uses **Kustomize** to manage Kubernetes deployments
 - The Kustomization manifest lists all the microservices components
 - Review all the components by looking inside the YAML file. 
 - Expect to see:
@@ -51,7 +52,7 @@ kubectl apply -k ~/environment/eks-workshop/base-application
 kubectl get pod -n catalog
 ```
 
-- The `kubectl wait` helps to monitor Ready state before issuing other commands
+- The `kubectl wait` helps to monitor `Ready` state before issuing other commands
 
 ```bash
 kubectl wait --for=condition=Ready --timeout=180s pods \
@@ -64,12 +65,36 @@ kubectl wait --for=condition=Ready --timeout=180s pods \
 ```bash
 kubectl get namespaces -l app.kubernetes.io/created-by=eks-workshop
 ```
+```bash
+NAME       STATUS   AGE
+assets     Active   2m22s
+carts      Active   2m22s
+catalog    Active   2m22s
+checkout   Active   2m22s
+orders     Active   2m22s
+other      Active   2m22s
+rabbitmq   Active   2m22s
+ui         Active   2m22s
+```
 
 - Check to confirm that the Deployments are created successfully
 
 ```bash
 kubectl get deployment -l app.kubernetes.io/created-by=eks-workshop -A
 ```
+```bash
+NAMESPACE   NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+assets      assets           1/1     1            1           3m15s
+carts       carts            1/1     1            1           3m15s
+carts       carts-dynamodb   1/1     1            1           3m15s
+catalog     catalog          1/1     1            1           3m14s
+checkout    checkout         1/1     1            1           3m14s
+checkout    checkout-redis   1/1     1            1           3m14s
+orders      orders           1/1     1            1           3m14s
+orders      orders-mysql     1/1     1            1           3m14s
+ui          ui               1/1     1            1           3m14s
+```
+
 
 # Testing Microservices Deployments
 
@@ -81,7 +106,7 @@ kubectl logs -n catalog -f deployment/catalog
 ```
 
 - At this points, all pods should be in running state
-- For catalog, I only deployed 1 replica
+- For `catalog`, I only deployed 1 replica
 
 ```bash
 kubectl get pod -n catalog
@@ -114,7 +139,7 @@ kubectl get pod -n catalog
 kubectl get svc -n catalog
 ```
 
-- Note: All the Services are internal to the cluster
+- **Note:** All the Services are internal to the cluster
   - Cannot be accessed from the Internet or even the VPC
 - Check the configuration
 
@@ -140,13 +165,13 @@ kubectl -n catalog exec -it \
 delete-environment
 ```
 
-- Delete cluster using eksctl in the Cloud9 terminal
+- Delete cluster using `eksctl` in the Cloud9 terminal
 
 ```bash
 eksctl delete cluster $EKS_CLUSTER_NAME --wait
 ```
 
-- Delete the cloudformaiton stack from the CloudShell terminal
+- Delete the cloudformaiton stack from the **CloudShell** terminal
 
 ```bash
 aws cloudformation delete-stack --stack-name eks-workshop-v1
